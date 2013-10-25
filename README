@@ -1,0 +1,8 @@
+How I did it last time:
+
+1. wget http://donnees.electionsmunicipales.gouv.qc.ca/
+2. grep for '.json' and use the ones that are linked with "'", not '"'. (The others are test ones). cut -d "'" -f 2.
+3. Put those IDs in a separate file, and add "http://donnees.electionsmunicipales.gouv.qc.ca/" in front.
+4. wget them all.
+5. Concatenate them, surrounded by "module.exports = [ ... ];", into as_module.js
+6. Run make_csv.coffee
