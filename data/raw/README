@@ -1,0 +1,3 @@
+media.xml: demo sent from Je Vote Pour Ma Ville
+zipfiles, DistrictElect.*: from http://www.donnees.gouv.qc.ca/
+gcsd000b11a_e.*: unzipped from http://www12.statcan.gc.ca/census-recensement/2011/geo/bound-limit/bound-limit-2011-eng.cfm: "Cartographic Boundary File", "ArcGIS", "English"
