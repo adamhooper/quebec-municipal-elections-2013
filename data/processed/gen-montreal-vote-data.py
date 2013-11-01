@@ -32,22 +32,22 @@ def parseCandidateNode(node, partyIdToName):
 # Returns a "Post" JSON-like object.
 #
 # Modifies the "candidates" list and other dictionaries in-place.
-def parsePostNode(postNode, candidates, partyIdToName, districtIdToName, arrondissementIdToName, districtIdToArrondissementId):
+def parsePostNode(postNode, candidates, partyIdToName, districtIdToName, boroughIdToName, districtIdToBoroughId):
     if postNode.tag == 'sommaire':
         postId = '0,00'
     else:
         postId = postNode.attrib['id']
-    post = { 'id': postId }
+    post = { 'id': postId, 'districtId': None, 'boroughId': None }
 
-    arrondissementId = None
+    boroughId = None
     districtId = None
     for childNode in postNode:
         if childNode.tag == 'type':
             post['type'] = childNode.text
         elif childNode.tag == 'arrondissement' and childNode.text:
-            arrondissementId = childNode.attrib['id']
-            arrondissementIdToName[arrondissementId] = childNode.text
-            post['arrondissementId'] = arrondissementId
+            boroughId = childNode.attrib['id']
+            boroughIdToName[boroughId] = childNode.text
+            post['boroughId'] = boroughId
         elif childNode.tag == 'district' and childNode.text:
             districtId = childNode.attrib['id']
             districtIdToName[districtId] = childNode.text
@@ -67,8 +67,8 @@ def parsePostNode(postNode, candidates, partyIdToName, districtIdToName, arrondi
             candidate['postId'] = postId
             candidates.append(candidate)
 
-    if districtId and arrondissementId:
-        districtIdToArrondissementId[districtId] = arrondissementId
+    if districtId and boroughId:
+        districtIdToBoroughId[districtId] = boroughId
 
     return post
 
@@ -92,20 +92,20 @@ def parsePostNode(postNode, candidates, partyIdToName, districtIdToName, arrondi
 #      'id': id,
 #      'type': type,
 #      'districtId': id or null,
-#      'arrondissementId': id or null,
+#      'boroughId': id or null,
 #      'nVoters': Number,
 #      'nVotes': Number,
 #      'nBallotsRejected': Number,
 #      'nStations': Number,
 #      'nStationsReported': Number
 #    ],
-#    arrondissements: [
+#    boroughs: [
 #      'id': id,
 #      'name': name
 #    ],
 #    districts: [
 #      'id': id,
-#      'arrondissementId': id,
+#      'boroughId': id,
 #      'name': name
 #    ]
 #  }
@@ -116,7 +116,7 @@ def readData():
         'parties': [],
         'candidates': [],
         'posts': [],
-        'arrondissements': [],
+        'boroughs': [],
         'districts': []
     }
 
@@ -125,32 +125,34 @@ def readData():
 
     partyIdToName = {}
     districtIdToName = {}
-    arrondissementIdToName = {}
-    districtIdToArrondissementId = {}
+    boroughIdToName = {}
+    districtIdToBoroughId = {}
 
     for node in root:
         if node.tag == 'resultats_postes':
             for postNode in node:
-                post = parsePostNode(postNode, data['candidates'], partyIdToName, districtIdToName, arrondissementIdToName, districtIdToArrondissementId)
+                post = parsePostNode(postNode, data['candidates'], partyIdToName, districtIdToName, boroughIdToName, districtIdToBoroughId)
                 data['posts'].append(post)
 
         elif node.tag == 'resultats_maire':
+            # The mayor post does not appear elsewhere. (The borough one does.)
             for postNode in node:
                 if postNode.tag == 'sommaire':
-                    post = parsePostNode(postNode, data['candidates'], partyIdToName, districtIdToName, arrondissementIdToName, districtIdToArrondissementId)
+                    post = parsePostNode(postNode, data['candidates'], partyIdToName, districtIdToName, boroughIdToName, districtIdToBoroughId)
+                    post['type'] = 'M'
                     data['posts'].append(post)
 
     for id, name in partyIdToName.items():
         data['parties'].append({ 'id': id, 'name': name })
 
-    for id, name in arrondissementIdToName.items():
-        data['arrondissements'].append({ 'id': id, 'name': name })
+    for id, name in boroughIdToName.items():
+        data['boroughs'].append({ 'id': id, 'name': name })
 
     for id, name in districtIdToName.items():
         data['districts'].append({
             'id': id,
             'name': name,
-            'arrondissementId': districtIdToArrondissementId[id]
+            'boroughId': districtIdToBoroughId[id]
         })
 
     return data

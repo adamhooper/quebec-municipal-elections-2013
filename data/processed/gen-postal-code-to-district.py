@@ -8,7 +8,7 @@ import re
 import zipfile
 
 ZIP_FILE = os.path.join(os.path.dirname(__file__), '..', 'raw', 'elections-2013-section-vote-par-adresse.zip')
-OUT_FILE = os.path.join(os.path.dirname(__file__), 'postal-code-to-district.json')
+OUT_FILE = os.path.join(os.path.dirname(__file__), 'district-to-postal-codes.json')
 
 POSTAL_CODE_REGEX = re.compile('^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$')
 DIGITS = '0123456789'
@@ -151,12 +151,29 @@ def compressPostalCodeToDistrict(postalCodeToDistrict, lengthToCompress):
 
     return ret
 
+def byDistrict(postalCodeToDistrict):
+    districtToPostalCode = {}
+
+    for postalCode, district in postalCodeToDistrict.items():
+        if district not in districtToPostalCode:
+            districtToPostalCode[district] = []
+
+        districtToPostalCode[district].append(postalCode)
+
+    for postalCodes in districtToPostalCode.values():
+        postalCodes.sort()
+
+    return districtToPostalCode
+
 def main():
     data = readPostalCodeToDistrict()
 
     print('Compressing...')
     for i in range(6, 1, -1):
         data = compressPostalCodeToDistrict(data, i)
+
+    print('Inverting...')
+    data = byDistrict(data)
 
     with open(OUT_FILE, 'w') as outFile:
         print('Writing to %s...' % (OUT_FILE,))
