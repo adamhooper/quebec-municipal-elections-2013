@@ -1,0 +1,5 @@
+<form action="" method="get">
+  <input name="postal-code" type="text" placeholder="H1H 1H1" value="<%- state.get('postalCodeInput') %>" />
+  <span class="error <%= errorMessage ? '' : 'no-error' %>"><%- errorMessage %></span>
+  <button type="submit">Search</button>
+</form>

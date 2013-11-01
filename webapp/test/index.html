@@ -1,0 +1,61 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Mocha Spec Runner</title>
+    <link rel="stylesheet" href="lib/mocha/mocha.css">
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="lib/mocha/mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <!-- assertion framework -->
+    <script src="lib/chai.js"></script>
+    <script>var expect = chai.expect</script>
+
+    <!-- include source files here... -->
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+    <script src="bower_components/chai-jquery/chai-jquery.js"></script>
+    <script src="bower_components/sinon-chai/lib/sinon-chai.js"></script>
+    <script src="bower_components/sinon/lib/sinon.js"></script>
+    <script src="bower_components/sinon/lib/sinon/assert.js"></script>
+    <script src="bower_components/sinon/lib/sinon/call.js"></script>
+    <script src="bower_components/sinon/lib/sinon/spy.js"></script>
+    <script src="bower_components/sinon/lib/sinon/stub.js"></script>
+
+    <script src="scripts/templates.js"></script>
+
+    <script src="scripts/models/Router.js"></script>
+    <script src="scripts/models/State.js"></script>
+    <script src="scripts/models/DistrictIdFinder.js"></script>
+    <script src="scripts/models/Database.js"></script>
+    <script src="scripts/views/District.js"></script>
+    <script src="scripts/views/PostalCode.js"></script>
+    <script src="scripts/views/Post.js"></script>
+
+    <!-- boilerplate, untested stuff -->
+    <script src="scripts/models/Borough.js"></script>
+    <script src="scripts/models/Candidate.js"></script>
+    <script src="scripts/models/District.js"></script>
+    <script src="scripts/models/Party.js"></script>
+    <script src="scripts/models/Post.js"></script>
+    <script src="scripts/collections/Boroughs.js"></script>
+    <script src="scripts/collections/Candidates.js"></script>
+    <script src="scripts/collections/Districts.js"></script>
+    <script src="scripts/collections/Parties.js"></script>
+    <script src="scripts/collections/Posts.js"></script>
+
+    <!-- include spec files here... -->
+    <script src="spec/models/Router.test.js"></script>
+    <script src="spec/models/State.test.js"></script>
+    <script src="spec/models/DistrictIdFinder.test.js"></script>
+    <script src="spec/models/Database.test.js"></script>
+    <script src="spec/views/District.test.js"></script>
+    <script src="spec/views/PostalCode.test.js"></script>
+    <script src="spec/views/Post.test.js"></script>
+
+    <script>mocha.run()</script>
+</body>
+</html>
