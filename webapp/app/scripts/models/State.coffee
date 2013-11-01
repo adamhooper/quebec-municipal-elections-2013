@@ -13,9 +13,10 @@ class QME.Models.State extends Backbone.Model
     @router = options.router
     @districtIdFinder = options.districtIdFinder
 
-    @router.on('route:postalCode', (input) => @handlePostalCode(input))
+    @listenTo(this, 'change:postalCode', (model, value, options) => @_onPostalCodeChanged(value, options))
+    @listenTo(@router, 'route:postalCode', (input) => @handlePostalCode(input, fromUser: false))
 
-  handlePostalCode: (input) ->
+  handlePostalCode: (input, options) ->
     emptyRegex = /^\s*$/
     validRegex = /^\s*([A-Z][0-9][A-Z])\s*([0-9][A-Z][0-9])\s*$/
 
@@ -46,4 +47,8 @@ class QME.Models.State extends Backbone.Model
       postalCodeInput: input
       postalCodeError: 'Invalid'
 
-    @set(newAttrs)
+    @set(newAttrs, options)
+
+  _onPostalCodeChanged: (value, options) ->
+    if options.fromUser
+      @router.navigate("/postal-code/#{value}", replace: true)

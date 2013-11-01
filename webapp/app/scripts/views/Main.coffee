@@ -11,7 +11,7 @@ class QME.Views.Main extends Backbone.View
     @postalCodeView = new QME.Views.PostalCode(state: @state)
     @districtView = new QME.Views.District()
 
-    @listenTo(@postalCodeView, 'search', (postalCode) => @state.handlePostalCode(postalCode))
+    @listenTo(@postalCodeView, 'search', (postalCode) => @state.handlePostalCode(postalCode, fromUser: true))
     @listenTo(@state, 'change:districtId', => @_renderDistrict())
 
   render: ->

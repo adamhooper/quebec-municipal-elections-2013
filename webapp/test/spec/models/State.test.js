@@ -5,6 +5,7 @@
 
     beforeEach(function() {
       router = new Backbone.Model();
+      router.navigate = sinon.spy();
       districtIdFinder = { byPostalCode: sinon.stub() };
       state = new QME.Models.State({}, { router: router, districtIdFinder: districtIdFinder });
     });
@@ -56,6 +57,16 @@
       router.trigger('route:postalCode', 'H1H 1H1');
       expect(state.get('postalCode')).to.equal('H1H1H1');
       expect(state.get('postalCodeInput')).to.equal('H1H 1H1');
+    });
+
+    it('should not call router.navigate when called from router', function() {
+      router.trigger('route:postalCode', 'H1H 1H1');
+      expect(router.navigate.notCalled).to.be.ok;
+    });
+
+    it('should call router.navigate upon successful search', function() {
+      state.set({ postalCode: 'H1H1H1' });
+      expect(router.navigate.called).to.be.ok;
     });
   });
 })();
