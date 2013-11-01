@@ -2,7 +2,7 @@ window.QME ?= {}
 window.QME.Models ?= {}
 class QME.Models.State extends Backbone.Model
   defaults:
-    page: 'home'
+    districtId: null
     postalCode: null
     postalCodeInput: ''
     postalCodeError: null
@@ -13,15 +13,42 @@ class QME.Models.State extends Backbone.Model
     @router = options.router
     @districtIdFinder = options.districtIdFinder
 
-    @listenTo(this, 'change:postalCode', (model, value, options) => @_onPostalCodeChanged(value, options))
-    @listenTo(@router, 'route:postalCode', (input) => @handlePostalCode(input, fromUser: false))
+    @listenTo(@router, 'route:postalCode', (input) => @handlePostalCode(input))
+    @listenTo(@router, 'route:district', (input) => @handleDistrictId(input))
 
-  handlePostalCode: (input, options) ->
+  setPostalCode: (postalCode) ->
+    @handlePostalCode(postalCode)
+    if postalCode
+      @router.navigate("/postal-code/#{postalCode}", replace: true)
+    else
+      @router.navigate('', replace: true)
+
+  setDistrictId: (districtId) ->
+    @handleDistrictId(districtId)
+    if districtId
+      @router.navigate("/district/#{districtId}", replace: true)
+    else
+      @router.navigate('', replace: true)
+
+  handleDistrictId: (districtId) ->
+    newAttrs = if districtId
+      districtId: districtId
+      postalCode: null
+      postalCodeInput: ''
+      postalCodeError: null
+    else
+      districtId: null
+      postalCode: null
+      postalCodeInput: ''
+      postalCodeError: null
+
+    @set(newAttrs)
+
+  handlePostalCode: (input) ->
     emptyRegex = /^\s*$/
     validRegex = /^\s*([A-Z][0-9][A-Z])\s*([0-9][A-Z][0-9])\s*$/
 
     newAttrs = if emptyRegex.test(input)
-      page: 'home'
       districtId: null
       postalCode: null
       postalCodeInput: input
@@ -29,26 +56,19 @@ class QME.Models.State extends Backbone.Model
     else if (m = validRegex.exec(input.toUpperCase()))?
       postalCode = "#{m[1]}#{m[2]}"
       if (districtId = @districtIdFinder.byPostalCode(postalCode))?
-        page: 'district'
         districtId: districtId
         postalCode: postalCode
         postalCodeInput: input
         postalCodeError: null
       else
-        page: 'home'
         districtId: null
         postalCode: null
         postalCodeInput: input
         postalCodeError: 'NotFound'
     else
-      page: 'home'
       districtId: null
       postalCode: null
       postalCodeInput: input
       postalCodeError: 'Invalid'
 
-    @set(newAttrs, options)
-
-  _onPostalCodeChanged: (value, options) ->
-    if options.fromUser
-      @router.navigate("/postal-code/#{value}", replace: true)
+    @set(newAttrs)

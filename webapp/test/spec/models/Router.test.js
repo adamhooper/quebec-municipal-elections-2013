@@ -28,5 +28,12 @@
       router.navigate('', { trigger: true });
       expect(spy.calledWith()).to.be.ok;
     });
+
+    it('should route district/123 to route:district', function() {
+      var spy = sinon.spy();
+      router.on('route:district', spy);
+      router.navigate('/district/123', { trigger: true });
+      expect(spy.calledWith('123')).to.be.ok;
+    });
   });
 })();

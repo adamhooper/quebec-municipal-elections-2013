@@ -2,6 +2,7 @@ window.QME ?= {}
 window.QME.Views ?= {}
 class QME.Views.Main extends Backbone.View
   initialize: (options) ->
+    throw 'Must pass options.topology, a TopoJSON Object' if !options.topology?
     throw 'Must pass options.database, a QME.Models.Database' if !options.database?
     throw 'Must pass options.state, a QME.Models.State' if !options.state?
 
@@ -10,15 +11,18 @@ class QME.Views.Main extends Backbone.View
 
     @postalCodeView = new QME.Views.PostalCode(state: @state)
     @districtView = new QME.Views.District()
+    @mapView = new QME.Views.Map(state: @state, collection: @database.districts, topology: options.topology)
 
     @listenTo(@postalCodeView, 'search', (postalCode) => @state.handlePostalCode(postalCode, fromUser: true))
     @listenTo(@state, 'change:districtId', => @_renderDistrict())
 
   render: ->
     @postalCodeView.render()
+    @mapView.render()
     @districtView.render()
 
     @$el.append(@postalCodeView.el)
+    @$el.append(@mapView.el)
     @$el.append(@districtView.el)
 
     @_renderDistrict()
