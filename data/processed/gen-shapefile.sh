@@ -34,6 +34,6 @@ rm -f "$DIR/topology.json"
 topojson \
   -o "$DIR/topology.json" \
   -q 5e5 -s 3e-9 \
-  --id-property 'id' \
+  -p 'id' \
   -- \
   "$TEMP_DIR/districts.shp"
