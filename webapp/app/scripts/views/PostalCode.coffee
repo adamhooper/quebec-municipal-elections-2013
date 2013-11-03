@@ -1,6 +1,6 @@
 ErrorKeyToMessage =
   Invalid: 'Please enter a postal code of the form "H1H 1H1".'
-  NotFound: 'The postal code you entered does not seem to be in Montreal. Please try another.'
+  NotFound: 'The postal code you entered does not seem to be in Quebec. Please try another.'
   FusionError: 'We failed our search for your postal code. Please click your home on the map instead.'
 
 InfoKeyToMessage =
