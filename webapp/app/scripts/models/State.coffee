@@ -2,10 +2,9 @@ window.QME ?= {}
 window.QME.Models ?= {}
 class QME.Models.State extends Backbone.Model
   defaults:
-    districtId: null
-    postalCode: null
-    postalCodeInput: ''
-    postalCodeError: null
+    districtId: null # or String ID. CSDs are 5 chars long, MISSING initial "24".
+    info: null # 'Searching' or null
+    error: null # 'Invalid', 'NotFound', 'FusionError' or null
 
   initialize: (attributes, options) ->
     throw 'must pass options.router, a Backbone.Router' if !options.router?
@@ -13,17 +12,44 @@ class QME.Models.State extends Backbone.Model
     @router = options.router
     @districtIdFinder = options.districtIdFinder
 
-    @listenTo(@router, 'route:postalCode', (input) => @handlePostalCode(input))
+    @_searchPromise = null
+
     @listenTo(@router, 'route:district', (input) => @handleDistrictId(input))
 
-  setPostalCode: (postalCode) ->
-    @handlePostalCode(postalCode)
-    if postalCode
-      @router.navigate("/postal-code/#{postalCode}", replace: true)
+  _foundDistrict: (districtId) ->
+    @set
+      districtId: districtId
+      info: null
+      error: null
+    @_save()
+
+  _findingDistrict: ->
+    @set
+      districtId: null
+      info: 'Searching'
+      error: null
+
+  _error: (error) ->
+    @set
+      districtId: null
+      info: null
+      error: error
+
+  _home: ->
+    @set
+      districtId: null
+      info: null
+      error: null
+    @_save()
+
+  _save: ->
+    if (districtId = @get('districtId'))?
+      @router.navigate("/district/#{districtId}", replace: true)
     else
-      @router.navigate('', replace: true)
+      @router.navigate("", replace: true)
 
   setDistrictId: (districtId) ->
+    return if districtId == @get('districtId')
     @handleDistrictId(districtId)
     if districtId
       @router.navigate("/district/#{districtId}", replace: true)
@@ -31,44 +57,33 @@ class QME.Models.State extends Backbone.Model
       @router.navigate('', replace: true)
 
   handleDistrictId: (districtId) ->
-    newAttrs = if districtId
-      districtId: districtId
-      postalCode: null
-      postalCodeInput: ''
-      postalCodeError: null
+    if districtId?
+      @_foundDistrict(districtId)
     else
-      districtId: null
-      postalCode: null
-      postalCodeInput: ''
-      postalCodeError: null
-
-    @set(newAttrs)
+      @_home()
 
   handlePostalCode: (input) ->
     emptyRegex = /^\s*$/
     validRegex = /^\s*([A-Z][0-9][A-Z])\s*([0-9][A-Z][0-9])\s*$/
 
-    newAttrs = if emptyRegex.test(input)
-      districtId: null
-      postalCode: null
-      postalCodeInput: input
-      postalCodeError: null
+    if emptyRegex.test(input)
+      @_home()
     else if (m = validRegex.exec(input.toUpperCase()))?
       postalCode = "#{m[1]}#{m[2]}"
       if (districtId = @districtIdFinder.byPostalCode(postalCode))?
-        districtId: districtId
-        postalCode: postalCode
-        postalCodeInput: input
-        postalCodeError: null
+        @_foundDistrict(districtId)
       else
-        districtId: null
-        postalCode: null
-        postalCodeInput: input
-        postalCodeError: 'NotFound'
+        @_findingDistrict()
+        searchPromise = @_searchPromise = @districtIdFinder.byPostalCodeAsync(postalCode)
+        # This .done() can't be merged into one JS line (see test "re-entering a found postal code")
+        searchPromise.done (districtId) =>
+            return if searchPromise != @_searchPromise
+            if districtId?
+              @_foundDistrict(districtId)
+            else
+              @_error('NotFound')
+          .fail (error) =>
+            return if searchPromise != @_searchPromise
+            @_error(error)
     else
-      districtId: null
-      postalCode: null
-      postalCodeInput: input
-      postalCodeError: 'Invalid'
-
-    @set(newAttrs)
+      @_error('Invalid')

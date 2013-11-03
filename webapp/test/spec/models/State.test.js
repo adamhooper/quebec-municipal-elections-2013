@@ -6,73 +6,135 @@
     beforeEach(function() {
       router = new Backbone.Model();
       router.navigate = sinon.spy();
-      districtIdFinder = { byPostalCode: sinon.stub() };
+      districtIdFinder = { byPostalCode: sinon.stub(), byPostalCodeAsync: sinon.stub() };
       state = new QME.Models.State({}, { router: router, districtIdFinder: districtIdFinder });
     });
 
     it('should start at home with good defaults', function() {
-      expect(state.get('postalCode')).to.equal(null);
-      expect(state.get('postalCodeInput')).to.equal('');
-      expect(state.get('postalCodeError')).to.equal(null);
+      expect(state.get('districtId')).to.equal(null);
+      expect(state.get('error')).to.equal(null);
     });
 
-    describe('route:postalCode listener', function() {
-      it('should set postalCodeError=Invalid when invalid', function() {
-        router.trigger('route:postalCode', 'H321E1');
-        expect(state.get('postalCode')).to.equal(null);
-        expect(state.get('postalCodeInput')).to.equal('H321E1');
-        expect(state.get('postalCodeError')).to.equal('Invalid');
+    describe('handlePostalCode', function() {
+      it('should set error=Invalid when invalid', function() {
+        state.handlePostalCode('H321E1');
+        expect(state.get('districtId')).to.equal(null);
+        expect(state.get('error')).to.equal('Invalid');
       });
 
-      it('should set postalCodeError=NotFound when not found', function() {
-        districtIdFinder.byPostalCode.returns(null);
-        router.trigger('route:postalCode', 'H1H1H1');
-        expect(state.get('postalCode')).to.equal(null);
-        expect(state.get('postalCodeInput')).to.equal('H1H1H1');
-        expect(state.get('postalCodeError')).to.equal('NotFound');
+      describe('when postal code is not found', function() {
+        var promise;
+
+        beforeEach(function() {
+          promise = $.Deferred();
+          districtIdFinder.byPostalCode.returns(null);
+          districtIdFinder.byPostalCodeAsync.returns(promise);
+          state.handlePostalCode('H1H1H1');
+        });
+
+        it('should set info=Searching', function() {
+          expect(state.get('info')).to.equal('Searching');
+        });
+
+        it('should search asynchronously', function() {
+          expect(districtIdFinder.byPostalCodeAsync.called).to.be.ok;
+          expect(districtIdFinder.byPostalCodeAsync.firstCall.args[0]).to.equal('H1H1H1');
+        });
+
+        it('should set district ID on success', function() {
+          promise.resolve('123');
+          expect(state.get('districtId')).to.equal('123');
+          expect(state.get('info')).to.equal(null);
+          expect(state.get('error')).to.equal(null);
+        });
+
+        it('should navigate on success', function() {
+          promise.resolve('123');
+          expect(router.navigate.called).to.be.ok;
+        });
+
+        it('should set error=NotFound on null', function() {
+          promise.resolve(null);
+          expect(state.get('districtId')).to.equal(null);
+          expect(state.get('info')).to.equal(null);
+          expect(state.get('error')).to.equal('NotFound');
+        });
+
+        it('should set error=FusionError on error', function() {
+          promise.reject('FusionError');
+          expect(state.get('districtId')).to.equal(null);
+          expect(state.get('info')).to.equal(null);
+          expect(state.get('error')).to.equal('FusionError');
+        });
+
+        it('should not search when re-entering a found postal code', function() {
+          promise.resolve('123');
+          state.handlePostalCode('H1H1H1');
+          expect(state.get('districtId')).to.equal('123');
+          expect(state.get('info')).to.equal(null);
+          expect(state.get('error')).to.equal(null);
+        });
+
+        it('should not handle success when search 2 races past search 1', function() {
+          // promise is already set at this point; let's make something else race past it
+          var promise2 = $.Deferred();
+          districtIdFinder.byPostalCodeAsync.returns(promise2);
+          state.handlePostalCode('H2H2H2'); // goes to promise2
+          promise2.resolve('123');
+          promise.resolve('456');
+
+          expect(state.get('districtId')).to.equal('123');
+        });
+
+        it('should not handle error when search 2 races past search 1', function() {
+          // promise is already set at this point; let's make something else race past it
+          var promise2 = $.Deferred();
+          districtIdFinder.byPostalCodeAsync.returns(promise2);
+          state.handlePostalCode('H2H2H2'); // goes to promise2
+          promise2.resolve('123');
+          promise.reject('FusionError');
+
+          expect(state.get('districtId')).to.equal('123');
+          expect(state.get('error')).to.equal(null);
+        });
       });
 
-      it('should set districtId=something when found', function() {
+      it('should set districtId=something when found synchronously', function() {
         districtIdFinder.byPostalCode.returns('13');
-        router.trigger('route:postalCode', 'H1H1H1');
+        state.handlePostalCode('H1H1H1');
         expect(state.get('districtId')).to.equal('13');
-        expect(state.get('postalCode')).to.equal('H1H1H1');
-        expect(state.get('postalCodeInput')).to.equal('H1H1H1');
-        expect(state.get('postalCodeError')).to.equal(null);
+        expect(state.get('error')).to.equal(null);
       });
 
       it('should not have an error on empty input', function() {
         router.trigger('route:postalCode', ' ');
-        expect(state.get('postalCode')).to.equal(null);
-        expect(state.get('postalCodeInput')).to.equal(' ');
-        expect(state.get('postalCodeError')).to.equal(null);
+        expect(state.get('districtId')).to.equal(null);
+        expect(state.get('error')).to.equal(null);
       });
 
       it('should allow spaces in postal codes', function() {
         districtIdFinder.byPostalCode.returns('1');
-        router.trigger('route:postalCode', 'H1H 1H1');
-        expect(state.get('postalCode')).to.equal('H1H1H1');
-        expect(state.get('postalCodeInput')).to.equal('H1H 1H1');
+        state.handlePostalCode('H1H 1H1');
+        expect(state.get('districtId')).to.equal('1');
       });
 
-      it('should not call router.navigate when called from router', function() {
-        router.trigger('route:postalCode', 'H1H 1H1');
-        expect(router.navigate.notCalled).to.be.ok;
+      it('should call router.navigate synchronously', function() {
+        districtIdFinder.byPostalCode.returns('1');
+        state.handlePostalCode('H1H1H1');
+        expect(router.navigate.called).to.be.ok;
       });
-    });
 
-    it('should call router.navigate upon successful search', function() {
-      state.setPostalCode('H1H1H1');
-      expect(router.navigate.called).to.be.ok;
+      it('should call router.navigate back to empty synchronously', function() {
+        state.handlePostalCode('');
+        expect(router.navigate.called).to.be.ok;
+      });
     });
 
     describe('route:district handler', function() {
       it('should set district', function() {
         router.trigger('route:district', '1');
-        expect(state.get('postalCode')).to.equal(null);
-        expect(state.get('postalCodeInput')).to.equal('');
-        expect(state.get('postalCodeError')).to.equal(null);
         expect(state.get('districtId')).to.equal('1');
+        expect(state.get('error')).to.equal(null);
       });
 
       it('should call router.navigate upon successful setDistrictId', function() {
@@ -82,9 +144,7 @@
 
       it('should unset district', function() {
         state.setDistrictId(null);
-        expect(state.get('postalCode')).to.equal(null);
-        expect(state.get('postalCodeInput')).to.equal('');
-        expect(state.get('postalCodeError')).to.equal(null);
+        expect(state.get('error')).to.equal(null);
         expect(state.get('districtId')).to.equal(null);
       });
     });

@@ -15,16 +15,9 @@
       stub = null;
     });
 
-    it('should route postal-code/x1x1x1 to route:postalCode', function () {
+    it('should route empty string to route:district', function() {
       var spy = sinon.spy();
-      router.on('route:postalCode', spy);
-      router.navigate('/postal-code/x1x1x1', { trigger: true });
-      expect(spy.calledWith('x1x1x1')).to.be.ok;
-    });
-
-    it('should route empty string to home', function() {
-      var spy = sinon.spy();
-      router.on('route:home', spy);
+      router.on('route:district', spy);
       router.navigate('', { trigger: true });
       expect(spy.calledWith()).to.be.ok;
     });

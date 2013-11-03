@@ -1,6 +1,10 @@
 ErrorKeyToMessage =
   Invalid: 'Please enter a postal code of the form "H1H 1H1".'
   NotFound: 'The postal code you entered does not seem to be in Montreal. Please try another.'
+  FusionError: 'We failed our search for your postal code. Please click your home on the map instead.'
+
+InfoKeyToMessage =
+  Searching: 'Searching for your postal code...'
 
 window.QME ?= {}
 window.QME.Views ?= {}
@@ -22,20 +26,24 @@ class QME.Views.PostalCode extends Backbone.View
 
   _initialRender: ->
     html = @template
-      state: @state
-      errorMessage: ErrorKeyToMessage[@state.get('postalCodeError')]
+      errorMessage: ErrorKeyToMessage[@state.get('error')]
+      infoMessage: InfoKeyToMessage[@state.get('info')]
 
     @$el.html(html)
     @$input = @$('input')
     @$error = @$('.error')
+    @$info = @$('.info')
 
   render: ->
-    if !@$input?
+    if !@$error?
       @_initialRender()
     else
-      errorMessage = ErrorKeyToMessage[@state.get('postalCodeError')] ? ''
+      errorMessage = ErrorKeyToMessage[@state.get('error')] ? ''
+      infoMessage = InfoKeyToMessage[@state.get('info')] ? ''
       @$error.toggleClass('no-error', !errorMessage)
       @$error.text(errorMessage)
+      @$info.toggleClass('no-info', !infoMessage)
+      @$info.text(infoMessage)
 
     this
 

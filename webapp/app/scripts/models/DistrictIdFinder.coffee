@@ -59,9 +59,9 @@ class QME.Models.DistrictIdFinder
           error: -> deferred.reject('FusionError')
 
       geocoder.geocode {
-        address: 'H3H1Z1',
+        address: postalCode,
         region: 'CA',
-        componentRestrictions: { postalCode: 'H3H1Z1' }
+        componentRestrictions: { postalCode: postalCode }
       }, (results, status) ->
         if status == google.maps.GeocoderStatus.ZERO_RESULTS || !(results?.length)
           deferred.reject('NotFound')

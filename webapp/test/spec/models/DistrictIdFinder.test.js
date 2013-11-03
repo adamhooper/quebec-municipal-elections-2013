@@ -145,6 +145,15 @@
             expect(stub.firstCall.args[0]).to.equal(null);
           });
 
+          it('should resolve instantaneously if called again', function() {
+            $.ajax.firstCall.args[0].success(
+              {"kind": "fusiontables#sqlresponse","columns": ["id"],"rows":[["102"]]}
+            );
+
+            var promise2 = topic.byPostalCodeAsync('H3H1Z1');
+            expect(promise2).to.equal(promise);
+          });
+
           it('should reject with FusionError on failure', function() {
             var stub = sinon.stub();
             promise.fail(stub);

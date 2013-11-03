@@ -20,7 +20,7 @@ class QME.Views.Main extends Backbone.View
       googleApiKey: options.googleApiKey
 
     @listenTo(@database.districts, 'add', (model) => @_onDistrictLoaded(model))
-    @listenTo(@postalCodeView, 'search', (postalCode) => @state.handlePostalCode(postalCode, fromUser: true))
+    @listenTo(@postalCodeView, 'search', (postalCode) => @state.handlePostalCode(postalCode))
     @listenTo(@state, 'change:districtId', => @_renderDistrict())
     @listenTo(@mapView, 'googleMapsLoaded', => @trigger('googleMapsLoaded'))
 
