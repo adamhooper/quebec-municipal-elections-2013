@@ -7,6 +7,7 @@ import json
 import re
 import zipfile
 
+CSV_FILE = os.path.join(os.path.dirname(__file__), '..', 'raw', 'fsa-to-csduid.csv')
 ZIP_FILE = os.path.join(os.path.dirname(__file__), '..', 'raw', 'elections-2013-section-vote-par-adresse.zip')
 OUT_FILE = os.path.join(os.path.dirname(__file__), 'district-to-postal-codes.json')
 
@@ -100,7 +101,7 @@ def readPostalCodeToDistrict():
 # will become:
 #
 #     { 'H2T1T': '131' }
-def compressPostalCodeToDistrict(postalCodeToDistrict, lengthToCompress):
+def compressPostalCodeToDistrict(postalCodeToDistrict, lengthToCompress, fsasOutsideMontreal):
     ret = {}
 
     if lengthToCompress % 2 == 0:
@@ -115,7 +116,9 @@ def compressPostalCodeToDistrict(postalCodeToDistrict, lengthToCompress):
     partialCodesToExamine = set()
 
     for postalCode, district in postalCodeToDistrict.items():
-        if len(postalCode) > lengthToCompress:
+        # If we already have information that a postal code cannot be compressed
+        # or it might point outside Montreal, we should not compress any more.
+        if len(postalCode) > lengthToCompress or postalCode[:3] in fsasOutsideMontreal:
             ret[postalCode] = district
             partialCode = postalCode[:lengthToCompress - 1]
             partialCodesToIgnore.add(partialCode)
@@ -168,9 +171,23 @@ def byDistrict(postalCodeToDistrict):
 def main():
     data = readPostalCodeToDistrict()
 
+    fsasOutsideMontreal = {}
+    print('Adding Quebec-wide FSAs...')
+    with open(CSV_FILE) as f:
+        f.readline()
+        for line in f:
+            fsa, csduid = line.strip().split(',')
+            district = csduid[2:]
+            fsasOutsideMontreal[fsa] = district
+
     print('Compressing...')
-    for i in range(6, 1, -1):
-        data = compressPostalCodeToDistrict(data, i)
+    # Compress down to FSAs at best. We don't have enough data to go smaller.
+    for i in range(6, 3, -1):
+        data = compressPostalCodeToDistrict(data, i, fsasOutsideMontreal)
+
+    print('Finalizing FSAs...')
+    for fsa, district in fsasOutsideMontreal.items():
+        data[fsa] = district
 
     print('Inverting...')
     data = byDistrict(data)
