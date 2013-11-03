@@ -15,19 +15,21 @@ class QME.Models.Database
   postsForDistrictId: (districtId) ->
     district = @districts.get(districtId)
 
-    if district?
+    ret = if district?
       if districtId.length < 5
         boroughId = district.get('boroughId')
 
         postsForDistrict = @posts.where({ districtId: districtId })
         postsForBorough = @posts.where({ boroughId: boroughId, districtId: null })
-        postsForCity = @posts.where({ boroughId: null })
+        postsForCity = @posts.where({ districtId: null, boroughId: null })
 
         postsForDistrict.concat(postsForBorough, postsForCity)
       else
         @posts.where({ districtId: districtId })
     else
       []
+    console.log(districtId, district, ret)
+    ret
 
   # Given a Post, returns a JSON object describing the candidates. (This is
   # suitable for viewing.)

@@ -40,9 +40,39 @@ class QME.Models.DistrictLoader
 
     for post in json.ville.postes
       postId = "#{districtId}-#{post.id}"
+
+      boroughName = if post.id_arrondissement
+        @boroughs.get("#{districtId}-#{post.id_arrondissement}")?.get('name')
+      else
+        ''
+      postName = post.nom || ''
+      postNum = parseFloat(post.no)
+      if postNum
+        postNum += 1 # post no. 1 means "Councillor (2)"
+      else
+        postNum = null # post no. 0 means "Councillor"
+
+      fullPostName = if boroughName
+        if postName
+          "#{boroughName} / #{postName}"
+        else if postNum
+          "#{boroughName} #{postNum}"
+        else
+          boroughName
+      else if postName
+        if postNum
+          "#{postName} #{postNum}"
+        else
+          postName
+      else if postNum
+        postNum
+      else
+        null
+
       posts.push
         id: postId
         type: post.type_poste
+        name: fullPostName
         districtId: districtId
         boroughId: if post.id_arrondissement then "#{districtId}-#{post.id_arrondissement}" else null
         nVoters: null

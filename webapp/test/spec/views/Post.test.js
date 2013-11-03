@@ -9,6 +9,7 @@
         type: 'CV',
         boroughId: 'b1',
         districtId: 'd1',
+        name: 'District blah',
         nVoters: 1000,
         nVotes: 800,
         nBallotsRejected: 10,
@@ -50,6 +51,10 @@
       var $nVotes = $li.find('.num-votes');
       expect($nVotes.find('.bar').attr('style')).to.equal('width:9.4%;');
       expect($nVotes.find('.text').text()).to.equal('75 (9.4%)');
+    });
+
+    it('should render district name', function() {
+      expect(topic.$('.post-name').text()).to.equal('(District blah)');
     });
   });
 })();

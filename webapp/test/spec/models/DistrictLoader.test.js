@@ -61,6 +61,7 @@
         expect(posts.get('43027-194886').toJSON()).to.deep.equal({
           'id': '43027-194886',
           'type': 'M',
+          'name': null,
           'districtId': '43027',
           'boroughId': null,
           'nVoters': null
@@ -69,6 +70,10 @@
 
       it('should translate borough IDs properly', function() {
         expect(posts.get('43027-194888').get('boroughId')).to.equal('43027-REB01');
+      });
+
+      it('should add borough / district names to a post in parentheses', function() {
+        expect(posts.get('43027-194887').get('name')).to.equal('Brompton / de Brompton');
       });
 
       it('should add candidates', function() {

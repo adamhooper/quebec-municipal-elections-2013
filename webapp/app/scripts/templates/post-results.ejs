@@ -1,4 +1,9 @@
-<h3 class="post-type"><%- postType %></h3>
+<h3 class="post-type">
+  <%- postType %>
+  <% if (post.name) { %>
+    <span class="post-name">(<%- post.name %>)</span>
+  <% } %>
+</h3>
 <ul class="candidates">
   <% _.each(candidates, function(candidate) { %>
     <li class="candidate" data-candidate-id="<%- candidate.id %>">
