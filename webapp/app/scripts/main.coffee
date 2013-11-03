@@ -18,7 +18,7 @@ window.QME.init = ->
     districts: database.districts
     candidates: database.candidates
     posts: database.posts
-    urlPrefix: '/cached-donnees.electionsmunicipales.gouv.qc.ca'
+    urlPrefix: 'cached-donnees.electionsmunicipales.gouv.qc.ca'
 
   state = new QME.Models.State({}, router: router, districtIdFinder: districtIdFinder)
 
