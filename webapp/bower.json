@@ -8,7 +8,9 @@
     "modernizr": "~2.6.2",
     "sinon": "~1.7.3",
     "sinon-chai": "~2.4.0",
-    "chai-jquery": "~1.1.2"
+    "chai-jquery": "~1.1.2",
+    "geojson-google-maps": "*",
+    "topojson": "~1.4.4"
   },
   "devDependencies": {}
 }

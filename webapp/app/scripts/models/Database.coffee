@@ -16,13 +16,16 @@ class QME.Models.Database
     district = @districts.get(districtId)
 
     if district?
-      boroughId = district.get('boroughId')
+      if districtId.length < 5
+        boroughId = district.get('boroughId')
 
-      postsForDistrict = @posts.where({ districtId: districtId })
-      postsForBorough = @posts.where({ boroughId: boroughId, districtId: null })
-      postsForCity = @posts.where({ boroughId: null })
+        postsForDistrict = @posts.where({ districtId: districtId })
+        postsForBorough = @posts.where({ boroughId: boroughId, districtId: null })
+        postsForCity = @posts.where({ boroughId: null })
 
-      postsForDistrict.concat(postsForBorough, postsForCity)
+        postsForDistrict.concat(postsForBorough, postsForCity)
+      else
+        @posts.where({ districtId: districtId })
     else
       []
 

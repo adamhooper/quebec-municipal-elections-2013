@@ -1,9 +1,58 @@
-$colorBar: #aed;
+$colorBar: #970a00;
+$colorError: #970a00;
 $colorBorder: #ddd;
 
 body, html {
   margin: 0;
   padding: 0;
+  font-size: 15px; // we're in an iframe, we need pixel-perfection
+  font-family: 'Arial', sans-serif;
+}
+
+h2 {
+  font-family: 'Georgia', serif;
+  font-size: 1.25em;
+  line-height: 2em;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-family: 'Georgia', serif;
+  font-size: 1.125em;
+  line-height: 2.25em;
+}
+
+.map {
+  width: 100%;
+  height: 15em;
+  max-width: 20em;
+}
+
+.postal-code {
+  font-size: 1.5em;
+  margin-bottom: 1em;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  input, button {
+    font-size: 1em;
+  }
+
+  .error {
+    transition: height .5s ease-in-out;
+    overflow: hidden;
+    height: 1.25em;
+    color: $colorError;
+    font-size: .8em;
+    line-height: 1.25em;
+
+    .no-error {
+      height: 0;
+    }
+  }
 }
 
 ul {
@@ -51,8 +100,8 @@ li.candidate {
     }
 
     .text {
-      font-size: .6em;
-      line-height: 5em;
+      font-size: .8em;
+      line-height: 4em;
       float: right;
     }
   }

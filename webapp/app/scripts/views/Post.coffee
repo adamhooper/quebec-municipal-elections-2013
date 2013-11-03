@@ -2,6 +2,7 @@ PostTypes =
   CV: 'City Councillor'
   MC: 'Borough Mayor'
   CA: 'Borough Councillor'
+  C: 'Councillor'
   M: 'Mayor'
 
 window.QME ?= {}
