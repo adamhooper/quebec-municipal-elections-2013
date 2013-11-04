@@ -2,7 +2,6 @@ window.QME ?= {}
 window.QME.Views ?= {}
 class QME.Views.Main extends Backbone.View
   initialize: (options) ->
-    throw 'Must pass options.topology, a TopoJSON Object' if !options.topology?
     throw 'Must pass options.database, a QME.Models.Database' if !options.database?
     throw 'Must pass options.state, a QME.Models.State' if !options.state?
     throw 'Must pass options.districtLoader, a QME.Models.DistrictLoader' if !options.districtLoader?
@@ -17,8 +16,6 @@ class QME.Views.Main extends Backbone.View
     @districtView = new QME.Views.District()
     @mapView = new QME.Views.Map
       state: @state
-      collection: @database.districts
-      topology: options.topology
       googleApiKey: options.googleApiKey
       fusionTableId: options.fusionTableId
 

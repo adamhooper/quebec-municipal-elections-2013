@@ -1,7 +1,6 @@
 window.QME ?= {}
 window.QME.init = ->
   database = new QME.Models.Database(QME.data)
-  topology = QME.data.topology
 
   GoogleApiKey = 'AIzaSyBbcerjoK66hpuBRxpiUXszty65nxpkYKw'
   FusionTableId = '1YrM5MJTEdyZVHdry95nnCrpVBSp36LsCFPCycnA'
@@ -27,7 +26,6 @@ window.QME.init = ->
       state: state
       database: database
       districtLoader: districtLoader
-      topology: topology
       googleApiKey: GoogleApiKey
       fusionTableId: FusionTableId
 

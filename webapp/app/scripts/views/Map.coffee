@@ -20,8 +20,6 @@ class QME.Views.Map extends Backbone.View
 
   initialize: (options) ->
     throw 'Must pass options.state, a State' if !options.state?
-    throw 'Must pass options.collection, a Districts collection' if !options.collection?
-    throw 'Must pass options.topology, a TopoJSON Object with a "districts" key' if !options.topology?
     throw 'Must pass options.googleApiKey, a String' if !options.googleApiKey?
     throw 'Must pass options.fusionTableId, a String' if !options.fusionTableId?
 
@@ -37,9 +35,6 @@ class QME.Views.Map extends Backbone.View
     QME.Views.Map.global.once('googleMapsLoaded', => @trigger('googleMapsLoaded'))
 
     @_geoJson = {} # Promise objects for GeoJSON of a single polygon
-
-    # Calculate GeoJSON before it's needed, to spread the load a bit
-    @geoJson = topojson.feature(@topology, @topology.objects.districts)
 
   _fetchDistrictIdToPolygons: (districtId) ->
     deferred = $.Deferred()
@@ -86,26 +81,6 @@ class QME.Views.Map extends Backbone.View
         if districtId.length > 5
           districtId = districtId.slice(2)
         @trigger('districtIdClicked', districtId)
-
-    #districts = new GeoJSON(@geoJson, DefaultPolygonOptions)
-
-    #@districtIdToPolygon = districtIdToPolygon = {}
-
-    #addToMapRecursive = (feature) =>
-    #  if _.isArray(feature)
-    #    addToMapRecursive(f) for f in feature
-    #  else
-    #    featureId = feature.geojsonProperties.id
-    #    if featureId.length > 5
-    #      featureId = featureId.slice(2)
-    #    (districtIdToPolygon[featureId] ||= []).push(feature)
-    #    feature.setMap(@map)
-    #    google.maps.event.addListener feature, 'click', =>
-    #      console.log('Click', featureId)
-    #      @state.setDistrictId(featureId)
-    #  undefined
-
-    #addToMapRecursive(districts)
 
     zoomToPolygonBounds = (polygons) =>
       bounds = new google.maps.LatLngBounds()
