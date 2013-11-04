@@ -47,10 +47,7 @@ class QME.Models.DistrictLoader
         ''
       postName = post.nom || ''
       postNum = parseFloat(post.no)
-      if postNum
-        postNum += 1 # post no. 1 means "Councillor (2)"
-      else
-        postNum = null # post no. 0 means "Councillor"
+      postNum ||= null
 
       fullPostName = if boroughName
         if postName
@@ -60,14 +57,9 @@ class QME.Models.DistrictLoader
         else
           boroughName
       else if postName
-        if postNum
-          "#{postName} #{postNum}"
-        else
-          postName
-      else if postNum
-        postNum
+        postName
       else
-        null
+        postNum
 
       posts.push
         id: postId

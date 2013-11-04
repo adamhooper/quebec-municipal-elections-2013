@@ -8,7 +8,7 @@
   <% _.each(candidates, function(candidate) { %>
     <li class="candidate" data-candidate-id="<%- candidate.id %>">
       <h4 class="candidate-name"><%- candidate.name %></h4>
-      <% if (candidate.party.id != null) { %>
+      <% if (candidate.party.name) { %>
         <div class="party" data-party-id="<%- candidate.party.id %>"><%- candidate.party.name %></div>
       <% } %>
       <% var percent = Math.round(1000 * candidate.nVotes / (post.nVotes || 1)) / 10; %>

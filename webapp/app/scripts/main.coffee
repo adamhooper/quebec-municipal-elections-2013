@@ -29,6 +29,7 @@ window.QME.init = ->
       districtLoader: districtLoader
       topology: topology
       googleApiKey: GoogleApiKey
+      fusionTableId: FusionTableId
 
     view.once('googleMapsLoaded', -> districtIdFinder.setGoogle(google))
 

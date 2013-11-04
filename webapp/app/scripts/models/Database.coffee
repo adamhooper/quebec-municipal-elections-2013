@@ -28,7 +28,6 @@ class QME.Models.Database
         @posts.where({ districtId: districtId })
     else
       []
-    console.log(districtId, district, ret)
     ret
 
   # Given a Post, returns a JSON object describing the candidates. (This is
