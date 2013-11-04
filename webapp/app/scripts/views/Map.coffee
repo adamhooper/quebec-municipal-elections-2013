@@ -63,6 +63,9 @@ class QME.Views.Map extends Backbone.View
       zoom: 8
       center: new google.maps.LatLng(45.5086699, -73.553992499)
       mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeControl: false
+      overviewMapControl: false
+      streetViewControl: false
 
     window.google.maps.visualRefresh = true
     @map = new google.maps.Map(@el, mapOptions)
