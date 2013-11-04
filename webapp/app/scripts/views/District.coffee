@@ -31,5 +31,11 @@ class QME.Views.District extends Backbone.View
 
   _openPost: (e) ->
     e.preventDefault()
-    @$('li.post.open').removeClass('open')
-    $(e.target).closest('li.post').addClass('open')
+    $target = $(e.target)
+    return if $target.closest('ul.candidates').length # ignore clicks on candidate list
+    $li = $target.closest('li.post')
+    if $li.hasClass('open')
+      $li.removeClass('open')
+    else
+      @$('li.post.open').removeClass('open')
+      $li.addClass('open')
