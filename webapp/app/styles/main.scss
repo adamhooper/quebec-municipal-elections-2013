@@ -1,17 +1,21 @@
 $colorBar: #970a00;
 $colorError: #970a00;
 $colorBorder: #ddd;
+$colorFaded: #888;
+$colorStrong: #333;
 
 body, html {
   margin: 0;
   padding: 0;
   font-size: 15px; // we're in an iframe, we need pixel-perfection
   font-family: 'Arial', sans-serif;
+  color: $colorStrong;
 }
 
 h2 {
   position: absolute;
-  top: 1em;
+  margin: 0;
+  top: 1.5em;
   font-family: 'Georgia', serif;
   font-size: 1.75em;
   line-height: 1.5em;
@@ -19,10 +23,10 @@ h2 {
 }
 
 h3 {
+  margin: 0;
   font-family: 'Georgia', serif;
-  font-size: 1.125em;
-  line-height: 2.25em;
-  cursor: pointer;
+  font-size: 1.25em;
+  line-height: 2.8em;
 }
 
 .map-wrapper {
@@ -43,6 +47,11 @@ h3 {
     width: 100%;
     height: 100%;
   }
+}
+
+ul.posts {
+  display: block;
+  max-width: 30em;
 }
 
 .postal-code {
@@ -72,6 +81,37 @@ h3 {
   }
 }
 
+li.post {
+  display: inline-block;
+  width: 100%;
+  position: relative;
+  padding: .75em 0;
+  cursor: pointer;
+
+  h3 {
+    float: left;
+  }
+
+  .winner {
+    color: $colorFaded;
+    float: right;
+    text-align: right;
+
+    h4.candidate-name {
+      font-size: 1em;
+      line-height: 1.5em;
+      color: $colorStrong;
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      font-size: .8em;
+      line-height: 1.25em;
+    }
+  }
+}
+
 ul.candidates, ul.posts {
   list-style: none;
   margin: 0;
@@ -80,6 +120,8 @@ ul.candidates, ul.posts {
 
 ul.candidates {
   display: none;
+  clear: both;
+  cursor: auto;
 }
 
 li.open ul.candidates {
@@ -89,7 +131,14 @@ li.open ul.candidates {
 li.candidate {
   position: relative;
   padding: .5em 0 .5em 10em;
-  height: 3em;
+  min-height: 3em;
+  opacity: .6;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+
+  &:first-child {
+    opacity: 1;
+    -ms-filter: '';
+  }
 
   border-bottom: 1px solid $colorBorder;
   &:first-child {

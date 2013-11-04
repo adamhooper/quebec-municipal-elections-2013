@@ -24,8 +24,8 @@
             name: 'District 1'
           }),
           [
-            { post: new Backbone.Model({ id: 1, type: 'CV' }), candidatesJson: [] },
-            { post: new Backbone.Model({ id: 2, type: 'CV' }), candidatesJson: [] },
+            { post: new Backbone.Model({ id: '1', type: 'CV' }), candidatesJson: [] },
+            { post: new Backbone.Model({ id: '2', type: 'CV' }), candidatesJson: [] }
           ]
         );
       });

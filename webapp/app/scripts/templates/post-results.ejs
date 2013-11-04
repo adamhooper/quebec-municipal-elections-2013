@@ -4,6 +4,19 @@
     <span class="post-name">(<%- post.name %>)</span>
   <% } %>
 </h3>
+<% if (winner) { %>
+  <div class="winner" data-candidate-id="<%- winner.id %>">
+    <h4 class="candidate-name"><%- winner.name %></h4>
+    <% if (winner.party.name) { %>
+      <div class="party" data-party-id="<%- winner.party.id %>"><%- winner.party.name %></div>
+    <% } %>
+    <% if (candidates.length == 1) { %>
+      <div class="by-acclamation">by acclamation</div>
+    <% } else { %>
+      <div class="by-num-votes">by <span><%- formatInteger(winner.nVotes - candidates[1].nVotes) %></span> votes</div>
+    <% } %>
+  </div>
+<% } %>
 <ul class="candidates">
   <% _.each(candidates, function(candidate) { %>
     <li class="candidate" data-candidate-id="<%- candidate.id %>">
@@ -14,7 +27,7 @@
       <% var percent = Math.round(1000 * candidate.nVotes / (post.nVotes || 1)) / 10; %>
       <div class="num-votes">
         <div class="bar" style="width:<%- percent %>%;"></div>
-        <div class="text"><%- candidate.nVotes %> (<%- percent %>%)</div>
+        <div class="text"><abbr title="<%- formatInteger(candidate.nVotes) %> votes"><%- percent %>%</abbr></div>
       </div>
     </li>
   <% }); %>

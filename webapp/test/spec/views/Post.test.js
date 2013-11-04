@@ -56,5 +56,9 @@
     it('should render district name', function() {
       expect(topic.$('.post-name').text()).to.equal('(District blah)');
     });
+
+    it('should render the winner', function() {
+      expect(topic.$('.winner').text()).to.match(/Candidate 1/);
+    });
   });
 })();

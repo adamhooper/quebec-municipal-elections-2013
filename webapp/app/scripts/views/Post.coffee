@@ -27,7 +27,9 @@ class QME.Views.Post extends Backbone.View
     html = @template
       post: @model.attributes
       postType: postType
+      winner: @candidatesJson[0] ? null
       candidates: @candidatesJson
+      formatInteger: QME.Util.formatInteger
     @$el
       .html(html)
       .attr('data-post-id', @model.id)
