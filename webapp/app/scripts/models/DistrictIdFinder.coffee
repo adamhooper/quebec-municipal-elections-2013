@@ -46,6 +46,7 @@ class QME.Models.DistrictIdFinder
           data:
             key: googleApiKey
             sql: "SELECT id FROM #{fusionTableId} WHERE ST_INTERSECTS(geometry,RECTANGLE(LATLNG(#{latitude},#{longitude}),LATLNG(#{latitude},#{longitude})))"
+          dataType: 'jsonp'
           success: (json) ->
             id = json?.rows?[0]?[0]
             realId = if id
