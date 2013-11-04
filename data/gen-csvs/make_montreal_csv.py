@@ -117,6 +117,7 @@ def main():
             'District',
             'Post type',
             'Candidate',
+            'Party',
             'Votes',
             'State'
         ])
@@ -129,6 +130,9 @@ def main():
                     'C': 'Councillor',
                     'MC': 'Borough mayor'
                 }[post['type']]
+                party = candidate['party']
+                if party == 'Indépendant':
+                    party = 'Independent'
 
                 if len(post['candidates']) == 1:
                     state = 'Elected without opposition'
@@ -142,6 +146,7 @@ def main():
                     post['district'],
                     postType,
                     candidate['name'],
+                    party,
                     candidate['nVotes'],
                     state
                 ])

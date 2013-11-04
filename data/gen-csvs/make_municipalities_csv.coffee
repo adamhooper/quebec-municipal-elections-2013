@@ -22,6 +22,7 @@ out = [[
   'Post type'
   #'Candidate ID'
   'Candidate'
+  'Party'
   'Votes'
   'State'
 ]]
@@ -47,6 +48,9 @@ for ville in data
   for poste in ville.postes
     candidates = []
     for candidat in poste.candidats
+      party = candidat.parti
+      party = 'Independent' if party == 'Indépendant'
+
       candidates.push([
         ville.region
         ville.nom
@@ -58,6 +62,7 @@ for ville in data
         "#{TYPES_POSTE[poste.type_poste]}#{if (poste.no && poste.no != '0') then " (#{poste.no})" else ''}"
         #candidat.id
         "#{candidat.prenom} #{candidat.nom}"
+        party
         candidat.nb_vote
         ETATS[candidat.etat]
       ])
