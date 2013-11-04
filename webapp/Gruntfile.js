@@ -226,8 +226,8 @@ module.exports = function (grunt) {
                     src: [
                         '*.{ico,txt}',
                         '.htaccess',
-                        'cached-donnees.electionsmunicipales.gouv.qc.ca/*.json'
-                        'polygons/*.json'
+                        'cached-donnees.electionsmunicipales.gouv.qc.ca/*.json',
+                        'polygons/*.json',
                         'images/{,*/}*.{webp,gif}',
                         'styles/fonts/{,*/}*.*'
                     ]

@@ -24,6 +24,7 @@ class QME.Models.DistrictLoader
     if districtId not of @_requests
       request = $.ajax
         url: "#{@urlPrefix}/#{districtId}.json"
+        cache: false
 
         success: (json) =>
           @_handleJson(districtId, json)
