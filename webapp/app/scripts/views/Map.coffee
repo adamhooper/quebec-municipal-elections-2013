@@ -96,8 +96,6 @@ class QME.Views.Map extends Backbone.View
       lastPolygons = []
       lastPolygonsDistrictId = districtId
 
-      console.log('setDistrictId', districtId)
-
       if lastPolygonsDistrictId?
         @_districtIdToPolygonsAsync(districtId).done (polygons) =>
           return if districtId != lastPolygonsDistrictId
