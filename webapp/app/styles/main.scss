@@ -3,6 +3,7 @@ $colorError: #970a00;
 $colorBorder: #ddd;
 $colorFaded: #888;
 $colorStrong: #333;
+$colorHoverBackground: #f2f8ff;
 
 body, html {
   margin: 0;
@@ -52,6 +53,7 @@ h3 {
 ul.posts {
   display: block;
   max-width: 30em;
+  background-color: white;
 }
 
 .postal-code {
@@ -88,6 +90,10 @@ li.post {
   padding: .75em 0;
   cursor: pointer;
 
+  &:hover {
+    background: $colorHoverBackground;
+  }
+
   h3 {
     float: left;
   }
@@ -105,6 +111,10 @@ li.post {
     float: right;
     text-align: right;
 
+    &.without-party {
+      padding-top: .5em;
+    }
+
     h4.candidate-name {
       font-size: 1em;
       line-height: 1.5em;
@@ -116,6 +126,7 @@ li.post {
     div {
       font-size: .8em;
       line-height: 1.25em;
+      min-height: 1.25em; // even if empty
     }
   }
 }

@@ -5,7 +5,7 @@
   <% } %>
 </h3>
 <% if (winner) { %>
-  <div class="winner" data-candidate-id="<%- winner.id %>">
+  <div class="winner <%- winner.party.name ? 'with-party' : 'without-party' %>" data-candidate-id="<%- winner.id %>">
     <h4 class="candidate-name"><%- winner.name %></h4>
     <% if (winner.party.name) { %>
       <div class="party" data-party-id="<%- winner.party.id %>"><%- winner.party.name %></div>
