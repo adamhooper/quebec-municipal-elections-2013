@@ -6,6 +6,8 @@ $colorFaded: #888;
 $colorStrong: #333;
 $colorHoverBackground: #f2f8ff;
 
+$maxWidth: 35em;
+
 body, html {
   margin: 0;
   padding: 0;
@@ -32,7 +34,7 @@ h3 {
 .map-wrapper {
   position: relative;
   width: 100%;
-  max-width: 30em;
+  max-width: $maxWidth;
 
   .map-wrapper2 {
     position: relative;
@@ -51,12 +53,12 @@ h3 {
 
 ul.posts {
   display: block;
-  max-width: 30em;
+  max-width: $maxWidth;
   background-color: white;
 }
 
 .postal-code {
-  max-width: (30em / 1.25);
+  max-width: ($maxWidth / 1.25);
   position: relative;
   font-size: 1.25em;
   margin-bottom: 1em;
