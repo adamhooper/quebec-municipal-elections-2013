@@ -71,5 +71,11 @@
       expect(topic.$el.hasClass('undecided')).to.be.ok;
       expect(topic.$('.no-winner').length).to.be.ok;
     });
+
+    it('should not render a ul when there is a winner by acclamation', function() {
+      topic = new QME.Views.Post({ model: post, candidatesJson: candidatesJson.slice(0, 1) });
+      topic.render();
+      expect(topic.$('ul').length).to.equal(0);
+    });
   });
 })();

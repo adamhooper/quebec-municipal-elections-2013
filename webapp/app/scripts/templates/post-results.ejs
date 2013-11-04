@@ -21,18 +21,20 @@
     still no results
   </div>
 <% } %>
-<ul class="candidates">
-  <% _.each(candidates, function(candidate) { %>
-    <li class="candidate" data-candidate-id="<%- candidate.id %>">
-      <h4 class="candidate-name"><%- candidate.name %></h4>
-      <% if (candidate.party.name) { %>
-        <div class="party" data-party-id="<%- candidate.party.id %>"><%- candidate.party.name %></div>
-      <% } %>
-      <% var percent = Math.round(1000 * candidate.nVotes / (post.nVotes || 1)) / 10; %>
-      <div class="num-votes">
-        <div class="bar" style="width:<%- percent %>%;"></div>
-        <div class="text"><abbr title="<%- formatInteger(candidate.nVotes) %> votes"><%- percent %>%</abbr></div>
-      </div>
-    </li>
-  <% }); %>
-</ul>
+<% if (candidates.length > 1) { %>
+  <ul class="candidates">
+    <% _.each(candidates, function(candidate) { %>
+      <li class="candidate" data-candidate-id="<%- candidate.id %>">
+        <h4 class="candidate-name"><%- candidate.name %></h4>
+        <% if (candidate.party.name) { %>
+          <div class="party" data-party-id="<%- candidate.party.id %>"><%- candidate.party.name %></div>
+        <% } %>
+        <% var percent = Math.round(1000 * candidate.nVotes / (post.nVotes || 1)) / 10; %>
+        <div class="num-votes">
+          <div class="bar" style="width:<%- percent %>%;"></div>
+          <div class="text"><abbr title="<%- formatInteger(candidate.nVotes) %> votes"><%- percent %>%</abbr></div>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+<% } %>
