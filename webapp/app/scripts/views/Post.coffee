@@ -24,13 +24,25 @@ class QME.Views.Post extends Backbone.View
     postType = PostTypes[postTypeKey]
     throw "Could not understand post type #{postTypeKey}" if !postType
 
+    winner = if @candidatesJson[0]
+      if @candidatesJson[1]
+        if @candidatesJson[0].nVotes > @candidatesJson[1].nVotes
+          @candidatesJson[0]
+        else
+          null # tie
+      else
+        @candidatesJson[0] # by acclamation
+    else
+      @candidatesJson[0] # by number of votes
+
     html = @template
       post: @model.attributes
       postType: postType
-      winner: @candidatesJson[0] ? null
+      winner: winner
       candidates: @candidatesJson
       formatInteger: QME.Util.formatInteger
     @$el
       .html(html)
       .attr('data-post-id', @model.id)
+      .toggleClass('undecided', !winner?)
     this

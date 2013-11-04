@@ -16,6 +16,10 @@
       <div class="by-num-votes">by <span><%- formatInteger(winner.nVotes - candidates[1].nVotes) %></span> votes</div>
     <% } %>
   </div>
+<% } else { %>
+  <div class="no-winner">
+    still no results
+  </div>
 <% } %>
 <ul class="candidates">
   <% _.each(candidates, function(candidate) { %>

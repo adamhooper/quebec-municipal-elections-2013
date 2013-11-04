@@ -92,6 +92,14 @@ li.post {
     float: left;
   }
 
+  .no-winner {
+    color: $colorFaded;
+    float: right;
+    text-align: right;
+    font-size: .8em;
+    line-height: (3.5em / .8);
+  }
+
   .winner {
     color: $colorFaded;
     float: right;

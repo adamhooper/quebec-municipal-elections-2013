@@ -50,7 +50,8 @@
       var $li = topic.$el.find('li[data-candidate-id=c3]');
       var $nVotes = $li.find('.num-votes');
       expect($nVotes.find('.bar').attr('style')).to.equal('width:9.4%;');
-      expect($nVotes.find('.text').text()).to.equal('75 (9.4%)');
+      expect($nVotes.find('.text').text()).to.equal('9.4%');
+      expect($nVotes.find('abbr').attr('title')).to.equal('75 votes');
     });
 
     it('should render district name', function() {
@@ -59,6 +60,16 @@
 
     it('should render the winner', function() {
       expect(topic.$('.winner').text()).to.match(/Candidate 1/);
+    });
+
+    it('should not render a winner when two candidates have the same number of votes', function() {
+      candidatesJson[0].nVotes = 75;
+      candidatesJson[1].nVotes = 75;
+      candidatesJson[2].nVotes = 75;
+      topic = new QME.Views.Post({ model: post, candidatesJson: candidatesJson });
+      topic.render();
+      expect(topic.$el.hasClass('undecided')).to.be.ok;
+      expect(topic.$('.no-winner').length).to.be.ok;
     });
   });
 })();
