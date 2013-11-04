@@ -68,7 +68,7 @@ class QME.Models.DistrictLoader
         name: fullPostName
         districtId: districtId
         boroughId: if post.id_arrondissement then "#{districtId}-#{post.id_arrondissement}" else null
-        nVoters: null
+        nVotes: _.reduce(post.candidats, ((s, c) -> s + parseFloat(c.nb_vote)), 0)
 
       for candidate in post.candidats
         candidates.push
