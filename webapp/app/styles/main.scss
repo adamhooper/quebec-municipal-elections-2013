@@ -1,5 +1,6 @@
 $colorBar: #970a00;
-$colorError: #970a00;
+$colorErrorBackground: #ffa099;
+$colorInfoBackground: #99cfff;
 $colorBorder: #ddd;
 $colorFaded: #888;
 $colorStrong: #333;
@@ -57,29 +58,50 @@ ul.posts {
 }
 
 .postal-code {
-  font-size: 1.5em;
+  max-width: (30em / 1.25);
+  position: relative;
+  font-size: 1.25em;
   margin-bottom: 1em;
+  line-height: 1em;
 
   p {
     margin: 0;
     padding: 0;
   }
 
+  input {
+    width: 6em;
+  }
+
   input, button {
     font-size: 1em;
   }
 
-  .error {
-    transition: height .5s ease-in-out;
-    overflow: hidden;
-    height: 1.25em;
-    color: $colorError;
+  .error, .info {
+    position: absolute;
     font-size: .8em;
     line-height: 1.25em;
+    height: 1.25em;
+    bottom: -1.25em;
+    z-index: 1;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    opacity: 1;
+  }
 
-    .no-error {
-      height: 0;
-    }
+  .error {
+    background-color: $colorErrorBackground;
+  }
+
+  .info {
+    background-color: $colorInfoBackground;
+    opacity: .8;
+  }
+
+  .error.no-error, .info.no-info {
+    height: 0;
+    opacity: 0;
   }
 }
 
