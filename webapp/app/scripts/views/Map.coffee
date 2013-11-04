@@ -65,6 +65,7 @@ class QME.Views.Map extends Backbone.View
       mapTypeControl: false
       overviewMapControl: false
       streetViewControl: false
+      minZoom: 5
 
     window.google.maps.visualRefresh = true
     @map = new google.maps.Map(@$map[0], mapOptions)
