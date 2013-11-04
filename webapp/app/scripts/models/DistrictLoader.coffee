@@ -76,6 +76,7 @@ class QME.Models.DistrictLoader
           name: "#{candidate.prenom} #{candidate.nom}"
           postId: postId
           partyId: null
+          partyName: candidate.parti
           nVotes: parseFloat(candidate.nb_vote)
 
     @posts.add(posts)

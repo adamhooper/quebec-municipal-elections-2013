@@ -54,6 +54,6 @@ class QME.Models.Database
       id: model.id,
       party:
         id: partyId
-        name: @parties.get(partyId)?.get('name') ? null
+        name: model.get('partyName') ? @parties.get(partyId)?.get('name') ? null
       name: model.get('name')
       nVotes: model.get('nVotes')
