@@ -1,6 +1,9 @@
 window.QME ?= {}
 window.QME.Views ?= {}
 class QME.Views.District extends Backbone.View
+  events:
+    'click li.post': '_openPost'
+
   template: JST['app/scripts/templates/district.ejs']
 
   className: 'district'
@@ -25,3 +28,8 @@ class QME.Views.District extends Backbone.View
 
   setDistrictAndPosts: (@district, @postsAndCandidates) ->
     @render()
+
+  _openPost: (e) ->
+    e.preventDefault()
+    @$('li.post.open').removeClass('open')
+    $(e.target).closest('li.post').addClass('open')

@@ -16,7 +16,7 @@ OverlayPolygonOptions =
 window.QME ?= {}
 window.QME.Views ?= {}
 class QME.Views.Map extends Backbone.View
-  className: 'map'
+  className: 'map-wrapper'
 
   initialize: (options) ->
     throw 'Must pass options.state, a State' if !options.state?
@@ -35,6 +35,10 @@ class QME.Views.Map extends Backbone.View
     QME.Views.Map.global.once('googleMapsLoaded', => @trigger('googleMapsLoaded'))
 
     @_geoJson = {} # Promise objects for GeoJSON of a single polygon
+
+    $contents = $('<div class="map-wrapper2"><div class="map"></div></div>')
+    @$el.append($contents)
+    @$map = @$('.map')
 
   _fetchDistrictIdToPolygons: (districtId) ->
     deferred = $.Deferred()
@@ -63,7 +67,7 @@ class QME.Views.Map extends Backbone.View
       streetViewControl: false
 
     window.google.maps.visualRefresh = true
-    @map = new google.maps.Map(@el, mapOptions)
+    @map = new google.maps.Map(@$map[0], mapOptions)
 
     fusionTableOptions =
       map: @map

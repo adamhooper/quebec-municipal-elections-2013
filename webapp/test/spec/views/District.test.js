@@ -41,6 +41,12 @@
       it('should render each post', function() {
         expect(topic.$('li.post').length).to.equal(2);
       });
+
+      it('should set .open on a district when clicked', function() {
+        var $li = topic.$('li.post:eq(0)');
+        $li.click();
+        expect($li.hasClass('open')).to.be.ok;
+      });
     });
   });
 })();
