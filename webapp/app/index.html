@@ -13,17 +13,20 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
-        <!-- build:js scripts/vendor/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
-        <!-- endbuild -->
     </head>
     <body>
-        <!--[if lt IE 10]>
+        <!--[if lt IE 9]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-
         <div class="app"></div>
+
+        <p class="sources">
+          <em>Sources</em>:
+          <a title="Montreal election results" href="http://www.resultats-election-montreal.ca/">City of Montreal</a>,
+          <a title="Municipal election results" href="http://donnees.electionsmunicipales.gouv.qc.ca/">Municipal Affairs</a>,
+          <a title="Map regions" href="http://www12.statcan.gc.ca/census-recensement/2011/geo/index-eng.cfm">Statistics Canada</a>.
+        </p>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
@@ -32,10 +35,11 @@
             e=o.createElement(i);r=o.getElementsByTagName(i)[0];
             e.src='//www.google-analytics.com/analytics.js';
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            ga('create','UA-XXXXX-X');ga('send','pageview');
+            ga('create','UA-79453-7');ga('send','pageview');
         </script>
 
         <!-- build:js scripts/vendor.js -->
+        <script src="scripts/ie8-compat.js"></script>
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/backbone/backbone.js"></script>
