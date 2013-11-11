@@ -1,21 +1,24 @@
 #!/bin/bash
 
 DIR=`dirname $0`
-TMP="$DIR/tmp/municipal-json"
+RAW_DIR="$DIR/raw"
+TMP="$DIR/processed/tmp/municipal-json"
 
 SRC="http://donnees.electionsmunicipales.gouv.qc.ca"
-LOCAL_DEST="$DIR/../municipal-jsons"
-WORK_DEST="$DIR/../../webapp/app/cached-donnees.electionsmunicipales.gouv.qc.ca"
-WORK_DEST2="$DIR/../../webapp/dist/cached-donnees.electionsmunicipales.gouv.qc.ca"
+LOCAL_DEST="$DIR/municipal-jsons"
+WORK_DEST="$DIR/../webapp/app/cached-donnees.electionsmunicipales.gouv.qc.ca"
+WORK_DEST2="$DIR/../webapp/dist/cached-donnees.electionsmunicipales.gouv.qc.ca"
 S3_DEST="s3://mtl-election/cached-donnees.electionsmunicipales.gouv.qc.ca"
 
 mkdir -p "$TMP"
+mkdir -p "$WORK_DEST"
+mkdir -p "$WORK_DEST2"
 
 CACHE_BUST="$RANDOM"000
 
 while true; do
   CACHE_BUST=$(($CACHE_BUST + 1))
-  for district_id in $(cat "$DIR/../json-list.txt"); do
+  for district_id in $(cat "$RAW_DIR/json-list.txt"); do
     filename="$district_id.json"
     rm -f "$TMP/$filename" && \
       echo "$SRC/$filename" && \

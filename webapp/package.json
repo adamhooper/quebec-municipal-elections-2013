@@ -1,6 +1,7 @@
 {
-  "name": "QME",
-  "version": "0.0.0",
+  "name": "qme13",
+  "description": "Quebec Municipal Elections 2013 visualization",
+  "version": "0.0.1",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

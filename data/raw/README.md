@@ -1,8 +1,21 @@
-* media.xml: demo sent from Je Vote Pour Ma Ville
-* DistrictElect.zip: from http://www.donnees.gouv.qc.ca/
+Not included in this repository:
+
+* districtelect.zip: shapefiles from http://www.donnees.gouv.qc.ca/
 * elections-2013-section-vote-par-adresse.zip: from http://donnees.ville.montreal.qc.ca/dataset/elections-2013-section-vote-par-adresse/resource/d0be2e73-2554-47cc-a081-81b6c75b6011
 * gcsd000b11a_e.zip: from http://www12.statcan.gc.ca/census-recensement/2011/geo/bound-limit/bound-limit-2011-eng.cfm: "Cartographic Boundary File", "ArcGIS", "English"
+
+Included in this repository:
+
+* media.xml: XML sent from Je Vote Pour Ma Ville (register for FTP access before election) (see below)
 * fsa-to-csduid.csv: hand-made (see below)
+* json-list.txt: list of Census Subdivisions, scraped from http://donnees.electionsmunicipales.gouv.qc.ca/
+
+media.xml
+---------
+
+The City of Montreal provides this data on election night, but you need to register for access.
+
+A recent version of it has been included in this repository for those who don't have access. If you do, you should refresh this version on election night.
 
 fsa-to-csduid.csv
 -----------------
@@ -11,7 +24,7 @@ The problem: we want postal-code lookups to be fast and not quota-encumbered.
 
 Solution: cache a mapping of postal code -> electoral region and use that instead of a web service. Outside of Montreal, electoral regions correspond with StatCan Census Subdivisions.
 
-The problem with that: postal codes are copyrighted by Canada Post. The only public data is Forward Sortation Areas, published by StatCan (at the URL above).
+The problem with that: postal code locations are not published by Canada Post. The only public data is Forward Sortation Areas, published by StatCan (at the URL above).
 
 Solution: cache whenever a FSA lies entirely within a CSD.
 
@@ -40,3 +53,5 @@ SELECT
 FROM fsa_csd_overlaps
 WHERE shared_area / fsa_area > 0.99
 ```
+
+The result has been included in this repository so you don't need to run it.

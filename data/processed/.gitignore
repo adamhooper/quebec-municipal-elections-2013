@@ -1,1 +1,5 @@
 tmp/
+polygons/
+district-to-postal-codes.json
+data.js
+montreal-data.json

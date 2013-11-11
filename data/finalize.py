@@ -1,11 +1,15 @@
 #!/usr/bin/env python
+#
+# Writes data.js, a JavaScript file that defines our data.
+#
+# This lets us bundle the data in the same JavaScript file as our code.
 
 import json
 import os.path
 
-DISTRICT_TO_POSTAL_CODES = os.path.join(os.path.dirname(__file__), 'district-to-postal-codes.json')
-MONTREAL_DATA = os.path.join(os.path.dirname(__file__), 'montreal-data.json')
-OUTPUT = os.path.join(os.path.dirname(__file__), 'data.js')
+DISTRICT_TO_POSTAL_CODES = os.path.join(os.path.dirname(__file__), 'processed', 'district-to-postal-codes.json')
+MONTREAL_DATA            = os.path.join(os.path.dirname(__file__), 'processed', 'montreal-data.json')
+OUTPUT                   = os.path.join(os.path.dirname(__file__), 'processed', 'data.js')
 
 def main():
     fullJson = {}

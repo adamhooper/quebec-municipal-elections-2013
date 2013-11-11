@@ -7,9 +7,9 @@ import json
 import re
 import zipfile
 
-CSV_FILE = os.path.join(os.path.dirname(__file__), '..', 'raw', 'fsa-to-csduid.csv')
-ZIP_FILE = os.path.join(os.path.dirname(__file__), '..', 'raw', 'elections-2013-section-vote-par-adresse.zip')
-OUT_FILE = os.path.join(os.path.dirname(__file__), 'district-to-postal-codes.json')
+CSV_FILE = os.path.join(os.path.dirname(__file__), 'raw', 'fsa-to-csduid.csv')
+ZIP_FILE = os.path.join(os.path.dirname(__file__), 'raw', 'elections-2013-section-vote-par-adresse.zip')
+OUT_FILE = os.path.join(os.path.dirname(__file__), 'processed', 'district-to-postal-codes.json')
 
 POSTAL_CODE_REGEX = re.compile('^[A-Z][0-9][A-Z][0-9][A-Z][0-9]$')
 DIGITS = '0123456789'

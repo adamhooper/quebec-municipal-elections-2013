@@ -4,8 +4,8 @@ import os.path
 import json
 from xml.etree import ElementTree
 
-XML_FILE = os.path.join(os.path.dirname(__file__), '..', 'raw', 'media.xml')
-OUT_FILE = os.path.join(os.path.dirname(__file__), 'montreal-data.json')
+XML_FILE = os.path.join(os.path.dirname(__file__), 'raw', 'media.xml')
+OUT_FILE = os.path.join(os.path.dirname(__file__), 'processed', 'montreal-data.json')
 
 # Returns a dict with { id, name, partyId, postId, nVotes }
 #

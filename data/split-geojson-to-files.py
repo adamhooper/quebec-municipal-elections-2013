@@ -15,6 +15,6 @@ def main(inFilename, outDirname):
             json.dump(feature, f)
 
 if __name__ == '__main__':
-    inFilename = os.path.join(os.path.dirname(__file__), 'tmp', 'districts.json')
-    outDirname = os.path.join(os.path.dirname(__file__), 'tmp', 'districts-split-geojson')
+    inFilename = os.path.join(os.path.dirname(__file__), 'processed', 'tmp', 'districts.json')
+    outDirname = os.path.join(os.path.dirname(__file__), 'processed', 'tmp', 'districts-split-geojson')
     main(inFilename, outDirname)
