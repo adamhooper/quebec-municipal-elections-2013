@@ -1,4 +1,10 @@
 #!/bin/bash
+#
+# Updates municipal election result JSON files locally and on Amazon S3.
+#
+# Updates them one at a time, and repeats at the start when it gets to the
+# end. Timed to take approximately 15 minutes to complete a cycle. (This is
+# the server load the electionsmunicipales.gouv.qc.ca folks wanted me to use.)
 
 DIR=`dirname $0`
 RAW_DIR="$DIR/raw"
