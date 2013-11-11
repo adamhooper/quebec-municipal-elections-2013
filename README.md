@@ -59,5 +59,5 @@ This section assumes you're comfortable with the command-line and typical web de
     1. `mkdir -p webapp/app/cached-donnees.electionsmunicipales.gouv.qc.ca && cd webapp/app/cached-donnees.electionsmunicipales.gouv.qc.ca` (we'll be here for the rest of this step)
     2. Download all the files: `for uid in $(cat ../../../data/raw/json-list.txt); do echo "$uid..."; curl "http://donnees.electionsmunicipales.gouv.qc.ca/$uid.json?CACHE_BUST=${RANDOM}${RANDOM}" -o "$uid.json" "-#"; sleep 1; done` (or use curl instead of wget)
 12. Deploy the server:
-    1. `cd webapp && grunt dist`
+    1. `cd webapp && grunt build`
     2. Copy the contents of `webapp/dist` onto any static file server. Point users at the `index.html` file within.
