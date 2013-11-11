@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import csv
 import os.path
 import json
 from xml.etree import ElementTree
