@@ -61,3 +61,8 @@ This section assumes you're comfortable with the command-line and typical web de
 12. Deploy the server:
     1. `cd webapp && grunt build`
     2. Copy the contents of `webapp/dist` onto any static file server. Point users at the `index.html` file within.
+
+License
+-------
+
+Public Domain. See LICENSE.
