@@ -6,7 +6,7 @@ import json
 from xml.etree import ElementTree
 
 XML_FILE = os.path.join(os.path.dirname(__file__), '..', 'raw', 'media.xml')
-OUT_FILE = os.path.join(os.path.dirname(__file__), 'montreal-data.csv')
+OUT_FILE = os.path.join(os.path.dirname(__file__), 'montreal-data.txt')
 
 # Returns a dict with { id, name, party, nVotes }
 def parseCandidateNode(node):
@@ -110,26 +110,32 @@ def readData():
 def main():
     posts = readData()
 
+    lastBorough = None
+    lastDistrict = None
+
     with open(OUT_FILE, 'w') as outFile:
-        writer = csv.writer(outFile, delimiter='\t')
-        writer.writerow([
-            'Borough',
-            'District',
-            'Post type',
-            'Candidate',
-            'Party',
-            'Votes',
-            'State'
-        ])
+        outFile.write('MONTREAL - MAYOR\n\n')
         for post in posts:
+            if post['borough'] != lastBorough:
+                lastBorough = post['borough']
+                lastDistrict = post['district']
+                outFile.write('\nBOROUGH: %s\n\n' % lastBorough)
+                outFile.write('\nDISTRICT: %s\n\n' % lastDistrict)
+            elif post['district'] != lastDistrict:
+                lastDistrict = post['district']
+                outFile.write('\nDISTRICT: %s (still borough %s)\n\n' % (lastDistrict, post['borough']))
+
+            postType = {
+                'M': 'Mayor',
+                'CA': 'Borough councillor',
+                'CV': 'City councillor',
+                'C': 'Councillor',
+                'MC': 'Borough mayor'
+            }[post['type']]
+
+            outFile.write('\nPOST: %s\n\n' % postType)
+
             for rank, candidate in enumerate(post['candidates']):
-                postType = {
-                    'M': 'Mayor',
-                    'CA': 'Borough councillor',
-                    'CV': 'City councillor',
-                    'C': 'Councillor',
-                    'MC': 'Borough mayor'
-                }[post['type']]
                 party = candidate['party']
                 if party == 'Indépendant':
                     party = 'Independent'
@@ -141,15 +147,7 @@ def main():
                 else:
                     state = 'Not elected'
 
-                writer.writerow([
-                    post['borough'],
-                    post['district'],
-                    postType,
-                    candidate['name'],
-                    party,
-                    candidate['nVotes'],
-                    state
-                ])
+                outFile.write('{0}, {1}\t{2:,d}\n'.format(candidate['name'], party, candidate['nVotes']))
 
 if __name__ == '__main__':
     main()
